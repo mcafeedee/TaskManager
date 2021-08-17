@@ -4,7 +4,7 @@
 package com.taskmanager.model;
 
 /**
- * @author Fei 
+ * @author Fei
  *
  */
 public class Process {

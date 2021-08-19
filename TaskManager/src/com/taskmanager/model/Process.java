@@ -18,38 +18,42 @@ public class Process {
 	private final String pid;
 	
 	/**
-	 * the initialized priority which can not be change
-	 */
-	private final Priority initPriority;
-	
-	/**
 	 * the priority of the process
 	 */
 	private Priority priority;
 
 	public Process(Priority priority) {
 		this.pid = UUID.randomUUID().toString();
-		this.initPriority = priority;
 		this.priority = priority;
 	}
 	
-	/**
-	 * the priority is set to the initial value before dying
-	 */
 	public void kill() {
-		this.priority = this.initPriority;
 	}
 
 	public Priority getPriority() {
 		return priority;
 	}
 
-	public void setPriority(Priority priority) {
-		this.priority = priority;
-	}
-
 	public String getPid() {
 		return pid;
+	}
+
+	@Override
+	public int hashCode() {
+		return pid.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Process other = (Process) obj;
+		
+		return pid.equals(other.pid);
 	}
 	
 	

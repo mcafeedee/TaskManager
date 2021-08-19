@@ -1,12 +1,18 @@
 /**
  * 
  */
-package com.taskmanager.model;
+package com.taskmanager;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import com.taskmanager.model.AddOption;
+import com.taskmanager.model.ListOption;
+import com.taskmanager.model.MaxCapacityReachedException;
+import com.taskmanager.model.Priority;
+import com.taskmanager.model.Process;
 
 /**
  * Task manager
@@ -71,7 +77,7 @@ public class TaskManager {
 				this.processes.remove(0);
 			} else {
 				int indexOfOldestLowestPriorityProcess = this.findIndexOfOldestLowestPriorityProcess();
-
+				System.out.println("indexOfOldestLowestPriorityProcess: " + indexOfOldestLowestPriorityProcess);
 				if (indexOfOldestLowestPriorityProcess >= 0) {
 					if (process.getPriority().getValue() <= this.processes.get(indexOfOldestLowestPriorityProcess)
 							.getPriority().getValue()) {
@@ -88,8 +94,9 @@ public class TaskManager {
 	}
 
 	/**
-	 * @param listOption
-	 * @return
+	 * List processes by given {@link ListOption}
+	 * @param listOption  given {@link ListOption}
+	 * @return  Cloned and sorted process list
 	 */
 	public List<Process> list(ListOption listOption) {
 		if (listOption == null) {
@@ -110,7 +117,57 @@ public class TaskManager {
 	}
 
 	/**
+	 * killing a specific process
+	 * 
+	 * @param p  Given process
+	 */
+	public void killByProcess(Process p) {
+		if (p == null) {
+			throw new IllegalArgumentException("Given process cannot be null");
+		}
+
+		for (int i = 0; i < this.processes.size(); i++) {
+			if (this.processes.get(i).equals(p)) {
+				this.processes.get(i).kill();
+				this.processes.remove(i);
+				return;
+			}
+		}
+	}
+
+	/**
+	 * killing all processes with a specific priority
+	 * 
+	 * @param priority Given priority
+	 */
+	public void killByPriority(Priority priority) {
+		if (priority == null) {
+			throw new IllegalArgumentException("Given process cannot be null");
+		}
+
+		for (int i = 0; i < this.processes.size(); i++) {
+			if (this.processes.get(i).getPriority() == priority) {
+				this.processes.get(i).kill();
+				this.processes.remove(i);
+				i--;
+			}
+		}
+	}
+
+	/**
+	 * killing all running processes
+	 */
+	public void killAll() {
+		for (int i = 0; i < this.processes.size(); i++) {
+			this.processes.get(i).kill();
+		}
+		
+		this.processes.clear();
+	}
+
+	/**
 	 * Find the index of process which is the oldest and has the lowest priority.
+	 * 
 	 * @return -1 if the list is empty, otherwise the found index.
 	 */
 	private int findIndexOfOldestLowestPriorityProcess() {
@@ -124,6 +181,11 @@ public class TaskManager {
 		for (int i = 1; i < this.processes.size(); i++) {
 			if (this.processes.get(i).getPriority().getValue() < oldestLowestPriorityProcess.getPriority().getValue()) {
 				indexOfOldestLowestPriorityProcess = i;
+				oldestLowestPriorityProcess = this.processes.get(i);
+				
+				if(oldestLowestPriorityProcess.getPriority()==Priority.LOW) {
+					return indexOfOldestLowestPriorityProcess;
+				}
 			}
 		}
 
@@ -137,10 +199,8 @@ public class TaskManager {
 	public static Comparator<Process> priorityComparator = new Comparator<Process>() {
 		@Override
 		public int compare(Process p1, Process p2) {
-			if (p1.getPriority().getValue() > p2.getPriority().getValue()) {
-				return -1;
-			} else if (p1.getPriority().getValue() < p2.getPriority().getValue()) {
-				return 1;
+			if (p1.getPriority().getValue() != p2.getPriority().getValue()) {
+				return p2.getPriority().getValue() - p1.getPriority().getValue();
 			}
 
 			return p1.getPid().compareTo(p2.getPid());

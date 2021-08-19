@@ -240,8 +240,7 @@ public class TestTaskManager {
 		this.addProcessesWithinCapacity(4, p0Low, p1High, p2Medium, p3Low);
 
 		underTest.killAll();
-		;
-
+		
 		List<Process> list = underTest.list(ListOption.TIME);
 		assertEquals(0, list.size());
 	}

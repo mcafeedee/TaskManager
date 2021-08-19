@@ -126,8 +126,7 @@ public class TestTaskManager {
 		}
 		assertNull(expectedException);
 
-		// this oldest low prioritized process is removed, the new old is added at the
-		// end
+		// this oldest low prioritized process is removed, the new is added at the end
 		List<Process> list = underTest.list(ListOption.TIME);
 		assertEquals(p1High.getPid(), list.get(0).getPid());
 		assertEquals(p2Medium.getPid(), list.get(1).getPid());
@@ -148,8 +147,7 @@ public class TestTaskManager {
 		}
 		assertNull(expectedException);
 
-		// this oldest low prioritized process is removed, the new old is added at the
-		// end
+		// this oldest low prioritized process is removed, the new is added at the end
 		List<Process> list = underTest.list(ListOption.TIME);
 		assertEquals(p1High.getPid(), list.get(0).getPid());
 		assertEquals(p2Medium.getPid(), list.get(1).getPid());
@@ -188,7 +186,7 @@ public class TestTaskManager {
 		assertEquals(4, list.size());
 		assertEquals(p1High.getPid(), list.get(0).getPid());
 		assertEquals(p2Medium.getPid(), list.get(1).getPid());
-		
+
 		if (p0Low.getPid().compareTo(p3Low.getPid()) < 0) {
 			assertEquals(p0Low.getPid(), list.get(2).getPid());
 			assertEquals(p3Low.getPid(), list.get(3).getPid());
@@ -248,6 +246,9 @@ public class TestTaskManager {
 		assertEquals(0, list.size());
 	}
 
+	/**
+	 * Utility method to add give processes to the task manager.
+	 */
 	private void addProcessesWithinCapacity(int maxCapacity, Process... processes) {
 		if (processes.length > maxCapacity) {
 			throw new IllegalArgumentException(

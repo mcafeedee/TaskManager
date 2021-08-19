@@ -255,7 +255,7 @@ public class TestTaskManager {
 		}
 
 		this.underTest = new TaskManager(maxCapacity);
-
+		
 		// all processes can be added without exception
 		Exception expectedException = null;
 		try {

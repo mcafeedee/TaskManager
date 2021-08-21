@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.taskmanager.model;
 
 import java.util.UUID;

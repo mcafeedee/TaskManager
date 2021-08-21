@@ -15,7 +15,7 @@ import com.taskmanager.model.Priority;
 import com.taskmanager.model.Process;
 
 /**
- * Task manager
+ * Task manager to add, list and kill process(es).
  * 
  * @author fei
  *
